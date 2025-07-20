@@ -18,7 +18,7 @@ We'd love it if you could do this within the next week or so, but let me know if
 
 ## Tasks
 - [x] Build logic to extract links from HTML
-- [ ] Build function to normalise extracted links
+- [x] Build function to normalise extracted links
 - [ ] Design and build logic for the actual crawling
   - fetch a page
   - extract it's links
