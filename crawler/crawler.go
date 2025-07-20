@@ -21,6 +21,8 @@ type Crawler struct {
 	Results      map[string][]string
 	ResultsMutex sync.Mutex
 
+	LogMutex sync.Mutex
+
 	RecursionLimit int
 }
 
@@ -59,7 +61,6 @@ func (c *Crawler) Crawl(u *url.URL, depth int) {
 	}
 
 	c.WaitGroup.Add(1)
-
 	go func() {
 		defer c.WaitGroup.Done()
 
@@ -68,27 +69,38 @@ func (c *Crawler) Crawl(u *url.URL, depth int) {
 			<-c.Sem
 		}()
 
-		fmt.Printf("Visiting: %s\n", u.String())
 		resp, err := c.HttpClient.Get(u.String())
 		if err != nil {
+			c.LogMutex.Lock()
+			fmt.Printf("Error fetching %s: %v\n", u.String(), err)
+			c.LogMutex.Unlock()
 			return
 		}
 		defer resp.Body.Close()
 
 		links, err := ExtractLinks(u, resp.Body)
 		if err != nil {
+			c.LogMutex.Lock()
+			fmt.Printf("Error extracting links from %s: %v\n", u.String(), err)
+			c.LogMutex.Unlock()
 			return
 		}
 
 		var linkStrings []string
 		for _, link := range links {
-			fmt.Printf("  -> %s\n", link.String())
 			linkStrings = append(linkStrings, link.String())
 		}
 
 		c.ResultsMutex.Lock()
-		c.Results[u.String()] = linkStrings
+		c.Results[normalizedUrl] = linkStrings
 		c.ResultsMutex.Unlock()
+
+		c.LogMutex.Lock()
+		fmt.Printf("Visited: %s\n", normalizedUrl)
+		for _, link := range links {
+			fmt.Printf("  -> %s\n", link.String())
+		}
+		c.LogMutex.Unlock()
 
 		for _, link := range links {
 			if c.ShouldVisit(NormaliseURL(link)) {
