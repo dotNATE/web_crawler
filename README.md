@@ -49,6 +49,15 @@ e.g.
 go run main.go https://monzo.com 3 output.json
 ```
 
+Finally, you can also run the below if you'd prefer to build the binary and run it directly
+```
+make build
+```
+then
+```
+./monzo_web_crawler https://monzo.com
+```
+
 - You must provide a `base_url` value.
 - If you provide `0` as the value for the `recursion_depth` then no limit will be applied, this has been added to speed up testing of live calls.
 - If you do not provide any input for `output_file` then one will not be generated.
