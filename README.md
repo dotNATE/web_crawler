@@ -17,7 +17,7 @@ We'd love it if you could do this within the next week or so, but let me know if
 - No use of full web crawling libraries, but HTML parsing packages are OK
 
 ## Tasks
-- [ ] Build logic to extract links from HTML
+- [x] Build logic to extract links from HTML
 - [ ] Build function to normalise extracted links
 - [ ] Design and build logic for the actual crawling
   - fetch a page
@@ -25,3 +25,10 @@ We'd love it if you could do this within the next week or so, but let me know if
   - save to results
   - determine if it should be visited
   - continue 'crawling' (recursive?)
+
+## How to use
+### Run all tests
+Run the below command from the root of the project in order to run the full suite of unit tests
+```
+make test
+```
