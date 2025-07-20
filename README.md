@@ -82,3 +82,8 @@ You may notice that, in it's current form, this only really works for grabbing t
 
 ## AI Disclaimer
 Please note that this was built with the assistance of ChatGPT and three cups of strong coffee.
+
+## GH Repo
+Just in case you'd like to browse the commit history ¯\\\_(ツ)_/¯
+
+https://github.com/dotNATE/web_crawler
