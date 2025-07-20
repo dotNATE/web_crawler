@@ -10,9 +10,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestExtractLinks(t *testing.T) {
+func TestExtractLinks_GetATags(t *testing.T) {
 	html := `<html><body>
 		<a href="https://example.com">Internal secure</a>
+		<div>Should be ignored</div>
+		<div href="/error">Should be ignored</div>
         <a href="/about">Internal by reference</a>
         <a href="http://external.com">External insecure</a>
         <a href="https://external.com">External secure</a>
@@ -34,7 +36,7 @@ func TestExtractLinks(t *testing.T) {
 		"https://example.com/about",
 		"http://external.com",
 		"https://external.com",
-		"https://example.com#fragment",
+		"https://example.com#main",
 		"https://example.com#main",
 		"https://example.com/about",
 		"mailto:example@example.com",
