@@ -48,7 +48,6 @@ func (c *Crawler) Crawl(u *url.URL) {
 	if _, loaded := c.Visited.LoadOrStore(normalizedUrl, true); loaded {
 		return
 	}
-	fmt.Printf("Visiting: %s\n", normalizedUrl)
 
 	c.WaitGroup.Add(1)
 
@@ -60,7 +59,8 @@ func (c *Crawler) Crawl(u *url.URL) {
 			<-c.Sem
 		}()
 
-		resp, err := c.HttpClient.Get(normalizedUrl)
+		fmt.Printf("Visiting: %s\n", u.String())
+		resp, err := c.HttpClient.Get(u.String())
 		if err != nil {
 			return
 		}
@@ -78,7 +78,7 @@ func (c *Crawler) Crawl(u *url.URL) {
 		}
 
 		c.ResultsMutex.Lock()
-		c.Results[normalizedUrl] = linkStrings
+		c.Results[u.String()] = linkStrings
 		c.ResultsMutex.Unlock()
 
 		for _, link := range links {

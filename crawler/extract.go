@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"net/url"
+	"strings"
 
 	"golang.org/x/net/html"
 )
@@ -26,9 +27,9 @@ func ExtractLinks(base *url.URL, body io.Reader) ([]*url.URL, error) {
 				key, val, more := tokenizer.TagAttr()
 
 				if string(key) == "href" {
-					href, err := base.Parse(string(val))
+					href, err := base.Parse(strings.TrimSpace(string(val)))
 					if err != nil {
-						log.Fatalf("Error parsing href from tag::\nkey:%+v\nvalue:%+v\n", string(key), string(val))
+						log.Fatalf("Error parsing href from tag::\nkey:%+v\nvalue:%+v\nerror:%+v\n", string(key), string(val), err)
 					}
 
 					result = append(result, href)
