@@ -24,6 +24,26 @@ func NewCrawler(base string) (*Crawler, error) {
 	}, nil
 }
 
-func (c *Crawler) Crawl() {
+func (c *Crawler) Start() {
+	c.Crawl(c.Base)
+}
+
+func (c *Crawler) Crawl(u *url.URL) {
 	fmt.Println("Crawl invoked")
+
+	// normalise url
+
+	// print to console
+
+	// get content from page
+
+	// extract links
+
+	// print links to console
+
+	// FOR LINKS
+	// determine if link should be visited (e.g. is internal?)
+
+	// recursively invoke crawl?
+	// END FOR
 }
