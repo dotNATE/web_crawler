@@ -15,6 +15,9 @@ type Crawler struct {
 	WaitGroup sync.WaitGroup
 	Visited   sync.Map
 	Sem       chan struct{}
+
+	Results      map[string][]string
+	ResultsMutex sync.Mutex
 }
 
 type HTTPClient interface {
@@ -31,6 +34,7 @@ func NewCrawler(base string, httpClient HTTPClient, concurrencyLimit int) (*Craw
 		Base:       u,
 		HttpClient: httpClient,
 		Sem:        make(chan struct{}, concurrencyLimit),
+		Results:    make(map[string][]string),
 	}, nil
 }
 
@@ -40,11 +44,11 @@ func (c *Crawler) Start() {
 }
 
 func (c *Crawler) Crawl(u *url.URL) {
-	normalizedUrl := NormaliseURL(u)
-	if _, loaded := c.Visited.LoadOrStore(normalizedUrl.String(), true); loaded {
+	normalizedUrl := NormaliseURL(u).String()
+	if _, loaded := c.Visited.LoadOrStore(normalizedUrl, true); loaded {
 		return
 	}
-	fmt.Printf("Visiting: %s\n", normalizedUrl.String())
+	fmt.Printf("Visiting: %s\n", normalizedUrl)
 
 	c.WaitGroup.Add(1)
 
@@ -56,7 +60,7 @@ func (c *Crawler) Crawl(u *url.URL) {
 			<-c.Sem
 		}()
 
-		resp, err := c.HttpClient.Get(normalizedUrl.String())
+		resp, err := c.HttpClient.Get(normalizedUrl)
 		if err != nil {
 			return
 		}
@@ -66,11 +70,18 @@ func (c *Crawler) Crawl(u *url.URL) {
 		if err != nil {
 			return
 		}
-		fmt.Printf("LINK: %+v\n", links)
 
+		var linkStrings []string
 		for _, link := range links {
 			fmt.Printf("  -> %s\n", link.String())
+			linkStrings = append(linkStrings, link.String())
+		}
 
+		c.ResultsMutex.Lock()
+		c.Results[normalizedUrl] = linkStrings
+		c.ResultsMutex.Unlock()
+
+		for _, link := range links {
 			if u.Host == c.Base.Host {
 				c.Crawl(link)
 			}

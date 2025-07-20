@@ -9,6 +9,7 @@ import (
 	"example.com/crawler"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 type MockHTTPClient struct {
@@ -55,5 +56,7 @@ func TestCrawl(t *testing.T) {
 	c.Crawl(c.Base)
 	c.WaitGroup.Wait()
 
-	assert.Equal(t, true, false)
+	require.Len(t, c.Results, 3)
+	assert.Equal(t, c.Results["https://example.com/"][0], "https://example.com/page1")
+	assert.Equal(t, c.Results["https://example.com/"][1], "https://example.com/page2")
 }
