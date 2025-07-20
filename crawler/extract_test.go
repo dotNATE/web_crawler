@@ -22,6 +22,7 @@ func TestExtractLinks_GetATags(t *testing.T) {
         <a href="https://example.com#main">Internal with fragment</a>
         <a href="https://example.com/about">Internal with path</a>
         <a href="mailto:example@example.com">Mailto link</a>
+        <a attribute="first" href="https://example.com">Multiple attributes internal</a>
     </body></html>`
 
 	baseURL, err := url.Parse("https://example.com")
@@ -29,7 +30,6 @@ func TestExtractLinks_GetATags(t *testing.T) {
 
 	links, err := crawler.ExtractLinks(baseURL, strings.NewReader(html))
 	require.NoError(t, err)
-	require.Len(t, links, 8)
 
 	expected := []string{
 		"https://example.com",
@@ -40,8 +40,10 @@ func TestExtractLinks_GetATags(t *testing.T) {
 		"https://example.com#main",
 		"https://example.com/about",
 		"mailto:example@example.com",
+		"https://example.com",
 	}
 
+	require.Len(t, links, len(expected))
 	for i, link := range links {
 		assert.Equal(t, expected[i], link.String())
 	}
