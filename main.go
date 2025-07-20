@@ -24,7 +24,7 @@ func main() {
 		}
 	}
 
-	c, err := crawler.NewCrawler(os.Args[1], &http.Client{}, 5, maxDepth)
+	c, err := crawler.NewCrawler(os.Args[1], &http.Client{}, 20, maxDepth)
 	if err != nil {
 		log.Fatalf("Failed to initalise Crawler: %+v", err)
 	}
