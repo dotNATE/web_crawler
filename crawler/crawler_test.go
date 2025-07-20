@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"example.com/crawler"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -44,12 +45,15 @@ func TestCrawl(t *testing.T) {
 				</body>
 			</html>
 		`)),
-	}, nil).Once()
+	}, nil)
 
-	c, err := crawler.NewCrawler("https://example.com", mockHttpClient)
+	c, err := crawler.NewCrawler("https://example.com", mockHttpClient, 5)
 	if err != nil {
 		t.Errorf("Failed to initialise Crawler: error: %+v", err)
 	}
 
 	c.Crawl(c.Base)
+	c.WaitGroup.Wait()
+
+	assert.Equal(t, true, false)
 }
