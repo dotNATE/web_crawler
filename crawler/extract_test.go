@@ -21,7 +21,7 @@ func TestExtractLinks_GetATags(t *testing.T) {
         <a href="#main">Fragment only</a>
         <a href="https://example.com#main">Internal with fragment</a>
         <a href="https://example.com/about">Internal with path</a>
-        <a href="mailto:example@example.com">Mailto link</a>
+        <a href="mailto:example@example.com">Mailto link - should ignore</a>
         <a attribute="first" href="https://example.com">Multiple attributes internal</a>
     </body></html>`
 
@@ -39,7 +39,6 @@ func TestExtractLinks_GetATags(t *testing.T) {
 		"https://example.com#main",
 		"https://example.com#main",
 		"https://example.com/about",
-		"mailto:example@example.com",
 		"https://example.com",
 	}
 
