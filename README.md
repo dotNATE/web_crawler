@@ -9,9 +9,19 @@ Ideally, write it as you would a production piece of code. This exercise is not 
 We'd love it if you could do this within the next week or so, but let me know if you'll need more time. Once you have submitted your task we will then schedule a 45 minute hangout with an engineer during which you'll share your screen and discuss your implementation.
 
 ## Requirements
- - Start from a given URL
- - Recursively visit all links found on pages within the same domain/subdomain
- - Print each visited URL and its internal links
- - Avoid revisiting the same URL
- - Restrict to one subdomain (e.g., https://monzo.com, not https://community.monzo.com)
- - No use of full web crawling libraries, but HTML parsing packages are OK
+- Start from a given URL
+- Recursively visit all links found on pages within the same domain/subdomain
+- Print each visited URL and its internal links
+- Avoid revisiting the same URL
+- Restrict to one subdomain (e.g., https://monzo.com, not https://community.monzo.com)
+- No use of full web crawling libraries, but HTML parsing packages are OK
+
+## Tasks
+- [ ] Build logic to extract links from HTML
+- [ ] Build function to normalise extracted links
+- [ ] Design and build logic for the actual crawling
+  - fetch a page
+  - extract it's links
+  - save to results
+  - determine if it should be visited
+  - continue 'crawling' (recursive?)
